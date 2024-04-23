@@ -1,13 +1,9 @@
-import Layout from "../components/layout";
 import React from 'react';
-import { useTable, useSortBy } from 'react-table';
-import styles from './CanadianCustomers.module.css'; 
+import BasicTable from "@/components/basictable";
 
 
 const CanadianCustomers = ({ canadianCustomers }) => {
-    const data = React.useMemo(() => canadianCustomers, [canadianCustomers]);
-
-    const columns = React.useMemo(() => [
+    const columns = [
         {
             Header: 'First Name',
             accessor: 'first_name',
@@ -24,58 +20,12 @@ const CanadianCustomers = ({ canadianCustomers }) => {
             Header: 'City',
             accessor: 'city',
         }
-    ], []);
-
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-    } = useTable({ columns, data }, useSortBy);
-
-    return (
-        <Layout>
-            <div className={styles.tableContainer}>
-                <table {...getTableProps()}>
-                    <thead>
-                        {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map(column => (
-                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                        {column.render('Header')}
-                                        <span>
-                                            {column.isSorted
-                                                ? column.isSortedDesc
-                                                    ? ' 🔽'
-                                                    : ' 🔼'
-                                                : ''}
-                                        </span>
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {rows.map(row => {
-                            prepareRow(row);
-                            return (
-                                <tr {...row.getRowProps()}>
-                                    {row.cells.map(cell => (
-                                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                                    ))}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-            </div>
-        </Layout>
-    );
+    ]
+    return <BasicTable columns={columns} data={canadianCustomers}/>;
 };
 
 export async function getServerSideProps() {
-    const response = await fetch('http://fastapi:8000/getCanadianCustomers');
+    const response = await fetch('http://localhost:8000/getCanadianCustomers');
     const canadianCustomers = await response.json();
 
     return { props: { canadianCustomers } };
