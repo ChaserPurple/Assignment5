@@ -3,6 +3,9 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 
+
+
+
 DATABASE_URL = "mysql+mysqlconnector://root:supersecretpassw0rd@localhost/sakila"
 
 
@@ -40,6 +43,26 @@ def getCanadianCustomers():
     """
     return executeSelect(query)
         
+
+@app.get("/getStoreFilms/")
+def getStoreFilm(store_id: int = 1):
+    query: str = f"select f.film_id, f.title, f.release_year, f.length, f.rating, f.rental_rate from (film as f inner join inventory as i on f.film_id=i.film_id) where i.store_id={store_id} and i.inventory_id not in (select distinct inventory_id from rental as r where r.return_date is null) group by f.film_id;"
+    return executeSelect(query)
+
+def getAddress():
+    
+
+@app.post("/createCustomer")
+def createCustomer():
+    {
+        "first_name": "",
+        "last_name": "",
+
+    }
+    pass
+
+
+
 @app.get("/getFilms")
 def getFilms():
     query: str = """
