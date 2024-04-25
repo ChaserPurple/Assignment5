@@ -1,12 +1,19 @@
+'use client';
 import { useRouter } from 'next/router'
 import Layout from "@/components/layout";
 import BasicTable from "@/components/basictable";
-import React from "react";
-const router = useRouter();
-const rentData = router.query;
+import { useEffect, useState } from 'react';
 
 
 export default function RentConfirmation(){
+    const router = useRouter();
+
+    const [rentData, setRentData] = useState([]);
+
+    useEffect(() => {
+        setRentData(router.query)
+      }, [])
+
     console.log(userData)
     return (
         <Layout>

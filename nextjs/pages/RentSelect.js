@@ -3,13 +3,13 @@ import Layout from "@/components/layout";
 import Link from "next/link";
 
 export async function getServerSideProps() {
-    const response = await fetch('http://localhost:8000/getFilms');
+    const response = await fetch('http://fastapi:8000/getFilms');
     const films = await response.json();
 
     return { props: { films } };
 }
 
-export default function RentSelect(){
+export default function RentSelect({films}){
     const columns = [
         {
             Header: 'Title',

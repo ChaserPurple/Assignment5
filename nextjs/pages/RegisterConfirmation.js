@@ -1,9 +1,6 @@
+'use client';
 import Layout from "@/components/layout";
-import { useRouter } from 'next/router'
-import {useSearchParams} from "next/navigation";
-
-const router = useRouter()
-const search = useSearchParams()
+import {useRouter, useSearchParams} from "next/navigation";
 
 
 export default function RegisterConfirmation(){
