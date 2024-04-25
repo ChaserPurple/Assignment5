@@ -3,6 +3,8 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 
+from app.CustomerData import CustomerData
+
 DATABASE_URL = "mysql+mysqlconnector://root:supersecretpassw0rd@localhost/sakila"
 
 
@@ -48,4 +50,7 @@ def getFilms():
     """
     return executeSelect(query)
 
+@app.post("/addCustomer")
+def addCustomer(data: CustomerData):
+    print(data)
         

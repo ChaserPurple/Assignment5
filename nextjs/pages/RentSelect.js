@@ -2,14 +2,8 @@ import BasicTable from "@/components/basictable";
 import Layout from "@/components/layout";
 import Link from "next/link";
 
-export async function getServerSideProps() {
-    const response = await fetch('http://localhost:8000/getFilms');
-    const films = await response.json();
 
-    return { props: { films } };
-}
-
-export default function RentSelect(){
+const RentSelect = ({films}) => {
     const columns = [
         {
             Header: 'Title',
@@ -34,3 +28,13 @@ export default function RentSelect(){
         </Layout>
     );
 }
+
+export async function getServerSideProps() {
+    const response = await fetch('http://localhost:8000/getFilms');
+    const films = await response.json();
+    console.log(response.json())
+
+    return { props: { films } };
+}
+
+export default RentSelect;

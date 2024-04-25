@@ -7,9 +7,11 @@ export default function Register(){
     async function onSubmit(event) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
+        console.log("==========================")
+        console.log(event.currentTarget)
         await fetch('http://localhost:8000/addCustomer', {
             method: 'POST',
-            body: formData,
+            body: event.currentTarget,
         })
     }
 
@@ -21,28 +23,28 @@ export default function Register(){
             </div>
             <form onSubmit={onSubmit}>
                 {/*First Name*/}
-                <label htmlFor="fname">First name:</label>
-                <input type="text" id="fname" name="fname"/><br/>
+                <label style={{padding: 20 + 'px'}} htmlFor="fname">First name:</label>
+                <input style={{margin: 20 + 'px'}} type="text" id="fname" name="fname"/><br/>
                 {/*Last Name*/}
-                <label htmlFor="lname">Last name:</label>
-                <input type="text" id="lname" name="lname"/><br/>
+                <label style={{padding: 20 + 'px'}} htmlFor="lname">Last name:</label>
+                <input style={{margin: 20 + 'px'}} type="text" id="lname" name="lname"/><br/>
                 {/*Email*/}
-                <label htmlFor="email">Email:</label>
-                <input type="text" id="email" name="email"/><br/>
+                <label style={{padding: 20 + 'px'}} htmlFor="email">Email:</label>
+                <input style={{margin: 20 + 'px'}} type="text" id="email" name="email"/><br/>
                 {/*Address, line 1*/}
-                <label htmlFor="address">Address:</label>
-                <input type="text" id="address" name="address"/><br/>
+                <label style={{padding: 20 + 'px'}} htmlFor="address">Address:</label>
+                <input style={{margin: 20 + 'px'}} type="text" id="address" name="address"/><br/>
                 {/*City*/}
-                <label htmlFor="city">City:</label>
-                <input type="text" id="city" name="city"/><br/>
+                <label style={{padding: 20 + 'px'}} htmlFor="city">City:</label>
+                <input style={{margin: 20 + 'px'}} type="text" id="city" name="city"/><br/>
                 {/*State*/}
-                <label htmlFor="state">State:</label>
-                <input type="text" id="state" name="state"/><br/>
+                <label style={{padding: 20 + 'px'}} htmlFor="state">State:</label>
+                <input style={{margin: 20 + 'px'}} type="text" id="state" name="state"/><br/>
                 {/*ZIP code*/}
-                <label htmlFor="zip">ZIP:</label>
-                <input type="text" id="zip" name="zip"/><br/>
+                <label style={{padding: 20 + 'px'}} htmlFor="zip">ZIP:</label>
+                <input style={{margin: 20 + 'px'}} type="text" id="zip" name="zip"/><br/>
                 {/*Submit*/}
-                <button type="submit">Submit</button>
+                <button style={{padding: 20 + 'px'}} type="submit">Submit</button>
             </form>
         </Layout>
     );
