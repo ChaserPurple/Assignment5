@@ -2,7 +2,6 @@ import BasicTable from "@/components/basictable";
 import Layout from "@/components/layout";
 import Link from "next/link";
 
-
 const RentSelect = ({films}) => {
     const columns = [
         {

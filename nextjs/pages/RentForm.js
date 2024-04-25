@@ -1,13 +1,20 @@
+'use client';
 import { useRouter } from 'next/router'
 import Layout from "@/components/layout";
 import Link from "next/link";
 import BasicTable from "@/components/basictable";
 import React from "react";
-
-const router = useRouter();
-const selectedFilms = router.query;
+import { useEffect, useState } from 'react';
 
 export default function RentForm(){
+    const router = useRouter();
+    const [selectedFilms, setSelectedFilms] = useState([]);
+
+    useEffect(() => {
+        setSelectedFilms(router.query)
+      }, [])
+
+
     async function onSubmit(event) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
@@ -45,7 +52,7 @@ export default function RentForm(){
                 {/*Submit*/}
                 <button style={{padding: 20 + 'px'}} type="submit">Submit</button>
             </form>
-            <BasicTable columns={columns} data={selectedFilms}/>
+            <BasicTable columns={columns} data={selectedFilms ?? []}/>
         </Layout>
     );
 }
