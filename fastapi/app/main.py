@@ -2,9 +2,7 @@ from fastapi import FastAPI
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
-
-
-
+from app.CustomerData import CustomerData
 
 DATABASE_URL = "mysql+mysqlconnector://root:supersecretpassw0rd@localhost/sakila"
 
@@ -19,6 +17,17 @@ def executeSelect(query: str):
     try:
         result = session.execute(text(query))
         return [dict(r._mapping) for r in result]
+    finally:
+        session.close()
+
+def executeInsert(query: str):
+    engine = create_engine(DATABASE_URL)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+    session = SessionLocal()
+    try:
+        result = session.execute(text(query))
+        return result
     finally:
         session.close()
 
@@ -48,8 +57,6 @@ def getCanadianCustomers():
 def getStoreFilm(store_id: int = 1):
     query: str = f"select f.film_id, f.title, f.release_year, f.length, f.rating, f.rental_rate from (film as f inner join inventory as i on f.film_id=i.film_id) where i.store_id={store_id} and i.inventory_id not in (select distinct inventory_id from rental as r where r.return_date is null) group by f.film_id;"
     return executeSelect(query)
-
-def getAddress():
     
 
 @app.post("/createCustomer")
@@ -71,4 +78,19 @@ def getFilms():
     """
     return executeSelect(query)
 
+def getCityID(city: str):
+    query: str = f"select city_id from city where city='{city}'"
+    return executeSelect(query)
+
+def createAddress(address: str, city: str, state: str, zip: str):
+    city_id = getCityID(city)
+    if len(city_id) == 1
+        query: str = f"insert into address (address, district, city_id, postal_code, phone, )"
+
+    
+
+@app.post("/addCustomer")
+def addCustomer(data: CustomerData):
+    print(data)
+    return getCityID(data.city)
         

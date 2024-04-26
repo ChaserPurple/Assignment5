@@ -44,13 +44,13 @@ export default function RentForm(){
             </div>
             <form onSubmit={onSubmit}>
                 {/*First Name*/}
-                <label htmlFor="fname">First name:</label>
-                <input type="text" id="fname" name="fname"/><br/>
+                <label style={{padding: 20 + 'px'}} htmlFor="fname">First name:</label>
+                <input style={{margin: 20 + 'px'}} type="text" id="fname" name="fname"/><br/>
                 {/*Last Name*/}
-                <label htmlFor="lname">Last name:</label>
-                <input type="text" id="lname" name="lname"/><br/>
+                <label style={{padding: 20 + 'px'}} htmlFor="lname">Last name:</label>
+                <input style={{margin: 20 + 'px'}} type="text" id="lname" name="lname"/><br/>
                 {/*Submit*/}
-                <button type="submit">Submit</button>
+                <button style={{padding: 20 + 'px'}} type="submit">Submit</button>
             </form>
             <BasicTable columns={columns} data={selectedFilms ?? []}/>
         </Layout>
