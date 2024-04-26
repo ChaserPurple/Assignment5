@@ -7,11 +7,25 @@ export default function Register(){
     async function onSubmit(event) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
+        const request = {
+            fname: formData.get("fname"),
+            lname: formData.get("lname"),
+            email: formData.get("email"),
+            address: formData.get("address"),
+            city: formData.get("city"),
+            state: formData.get("state"),
+            zip: formData.get("zip")
+        }
+        // formData.forEach((value, key) => {
+        //     console.log("key = " + key)
+        //     console.log("value = " + value)
+        //     body[key] = value
+        // })
         console.log("==========================")
-        console.log(event.currentTarget)
+        console.log(request)
         await fetch('http://localhost:8000/addCustomer', {
             method: 'POST',
-            body: event.currentTarget,
+            body: request,
         })
     }
 
@@ -42,7 +56,7 @@ export default function Register(){
                 <input style={{margin: 20 + 'px'}} type="text" id="state" name="state"/><br/>
                 {/*ZIP code*/}
                 <label style={{padding: 20 + 'px'}} htmlFor="zip">ZIP:</label>
-                <input style={{margin: 20 + 'px'}} type="text" id="zip" name="zip"/><br/>
+                <input style={{margin: 20 + 'px'}} type="number" min="0" id="zip" name="zip"/><br/>
                 {/*Submit*/}
                 <button style={{padding: 20 + 'px'}} type="submit">Submit</button>
             </form>
