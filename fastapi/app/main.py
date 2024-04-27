@@ -73,6 +73,16 @@ async def getCustomer(payload: Request):
     phone = data['phone']
     return {'customer_id': getSingleCustomer(fname, lname, phone)}
 
+@app.post('/rent')
+async def rentFilm(payload: Request):
+    data = await payload.json()
+    inventory_ids: list = data['inventory_ids']
+    customer_id = data['customer_id']
+    date = data['date']
+
+    for inventory in inventory_ids:
+        query = f"insert into rental (rental_date, inventory_id, customer_id, staff_id) values({date}, {inventory}, {customer_id}, 1)"
+        print(query)
 
 @app.get("/getFilms/")
 def getFilms(customer_id: str):
@@ -81,8 +91,8 @@ def getFilms(customer_id: str):
         store_id = store_ids[0]['store_id']
         result = executeSelect(
             '(film as f inner join inventory as i on f.film_id=i.film_id)', 
-            ['f.film_id', 'f.title', 'f.release_year', 'f.length', 'f.rating', 'f.rental_rate'],
-            f'where i.store_id={store_id} and i.inventory_id not in (select distinct inventory_id from rental as r where r.return_date is null) group by f.film_id')
+            ['f.film_id', 'i.inventory_id', 'f.title', 'f.release_year', 'f.length', 'f.rating', 'f.rental_rate'],
+            f'where i.store_id={store_id} and i.inventory_id not in (select distinct inventory_id from rental as r where r.return_date is null) group by f.film_id, i.inventory_id')
         return result
 
 

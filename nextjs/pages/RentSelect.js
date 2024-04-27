@@ -1,18 +1,32 @@
-import BasicTable from "@/components/basictable";
 import Layout from "@/components/layout";
-import Link from "next/link";
-import Checktable from "@/components/checktable";
 import CheckTable from "@/components/checktable";
+import {useState} from 'react';
 
 const RentSelect = ({films}) => {
+    const [checked, setChecked] = useState({})
+    const handleRowClick = (row, id_param) => {
+        const key = row[id_param]
+        if(key in checked) {
+            setChecked({...checked, [key]: !checked[key]})
+        }
+        else {
+            setChecked({...checked, [key]: true})
+        }
+        console.log(checked)
+    }
+
     const columns = [
         {
+            Header: 'Select',
+            accessor: '',
+        },
+        {
             Header: 'Title',
-            accessor: 'title',
+            accessor: 'f.title',
         },
         {
             Header: 'Year',
-            accessor: 'release_year',
+            accessor: 'f.release_year',
         }
     ]
     const handleConfirm = () => {
@@ -24,15 +38,15 @@ const RentSelect = ({films}) => {
         <Layout>
             <div class="row">
                 <h1>Rent a film</h1>
-                <Button onPress={handleConfirm()} query={getFilmSelection()}>Confirm</Button>
+                
             </div>
-            <CheckTable columns={columns} data={films}/>
+            <CheckTable columns={columns} data={films} id_key={'i.inventory_id'} checked={checked} callback={handleRowClick}/>
         </Layout>
     );
 }
 
 export async function getServerSideProps() {
-    const response = await fetch('http://localhost:8000/getFilms');
+    const response = await fetch('http://localhost:8000/getFilms?customer_id=1');
     const films = await response.json();
     console.log(response.json())
 
