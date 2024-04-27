@@ -1,29 +1,20 @@
-'use client';
-import { useRouter } from 'next/router'
 import Layout from "@/components/layout";
-import BasicTable from "@/components/basictable";
-import { useEffect, useState } from 'react';
-
+import Link from "next/link";
 
 export default function RentConfirmation(){
-    const router = useRouter();
+    const getDate = () => {
+        const date = new Date()
+        date.setDate(date.getDate() + 5)
+        return date.toDateString()
+    }
 
-    const [rentData, setRentData] = useState([]);
-
-    useEffect(() => {
-        setRentData(router.query)
-      }, [])
-
-    console.log(userData)
     return (
         <Layout>
-            <h1>Success!</h1>
-            <div class="row">
-                {/*TODO: Figure out what the keys actually are. I assume ids from farm*/}
-                <h3>{rentData.fname}</h3>
-                <h3>{rentData.lname}</h3>
-            </div>
-            <BasicTable columns={columns} data={rentData.films}/>
+            <main className="flex min-h-screen flex-col items-center justify-center">
+                <h1>Success!</h1>
+                <h3>Due Date: {getDate()}</h3>
+                <Link href="/">Okay</Link>
+            </main>
         </Layout>
     )
 }

@@ -1,17 +1,13 @@
 import Layout from "../components/layout";
 import Link from 'next/link';
 
-const goRent = () => {
-
-}
-
 export default function Home() {
   return (
       <Layout>
-          <main className="flex min-h-screen flex-col items-center justify-between p-24">
+          <main className="flex min-h-screen flex-col items-center justify-center">
               <h1>Home</h1>
-              <h3><Link href='/Register'>Become a Customer</Link></h3>
-              <h3><Link href='/RentForm'>Rent</Link></h3>
+              <p><Link href='/Register'>Become a Customer</Link></p>
+              <p><Link href='/RentForm'>Rent</Link></p>
           </main>
       </Layout>
   );

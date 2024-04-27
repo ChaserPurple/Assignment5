@@ -1,8 +1,13 @@
-'use client';
-import { useRouter } from 'next/router'
-// const router = useRouter();
-// const data = router.query;
+import Layout from "@/components/layout";
+import Link from "next/link";
 
 export default function CustomerConfirmation() {
-    return <div></div>
+    return (
+        <Layout>
+            <main className="flex min-h-screen flex-col items-center">
+                <h3>Success!</h3>
+                <Link href="/">Back</Link>
+            </main>
+        </Layout>
+    )
 }
