@@ -82,27 +82,22 @@ def getStoreFilm(store_id: int = 1):
         rows = conn.execute(s)
         print(rows.all())
     
-@app.get("/getCustomer")
-async def getCustomer(payload: Request):
-    data = await payload.json()
-    fname = data['fname']
-    lname = data['lname']
-    phone = data['phone']
+
+def getSingleCustomer(fname, lname, phone):
     result = executeSelect('customer join address on customer.address_id=address.address_id', ['customer_id'], f"where first_name='{fname}' and last_name='{lname}' and phone='{phone}'")
     row_id = -1
     if len(result) == 1:
         row_id = result[0]['customer_id']
     return row_id
 
-@app.post("/createCustomer")
-def createCustomer():
-    {
-        "first_name": "",
-        "last_name": "",
 
-    }
-    pass
-
+@app.post("/getCustomer")
+async def getCustomer(payload: Request):
+    data = await payload.json()
+    fname = data['fname']
+    lname = data['lname']
+    phone = data['phone']
+    return getSingleCustomer(fname, lname, phone)
 
 
 @app.get("/getFilms")
@@ -120,35 +115,50 @@ def getCityID(city: str):
     query: str = f"select city_id from city where city='{city}'"
     return executeSelect(query)
 
-def createAddress(address: str, city: str, state: str, zip_code: str, phone_number: str):
-    cities = getCityID(city)
-    row = -1
-    # if len(cities) == 1:
-    #     city_id = cities[0]['city_id']
-    #     query = text(with engine.connect() as conn:
-    #         rows = conn.execute(query)
-    #         conn.commit()
-    #         row = rows.lastrowid
-    # return row
-
-    
-@app.post("/addAddress")
-async def createAddress(payload: Request):
-    jsn = await payload.json()
-    address = jsn['address']
-    city = jsn['city']
-    district = jsn['district']
-    zip_code = jsn['zip_code']
-    phone_number = jsn['phone_number']
-    cities = getCityID(city)
+def createAddress(address: str, cities: list, district: str, zip_code: str, phone_number: str):
     row = -1
     if len(cities) == 1:
         city_id = cities[0][0]
         row = executeInsert(f"insert into address (address, district, city_id, postal_code, phone, location) values('{address}', '{district}', {city_id}, '{zip_code}', '{phone_number}', POINT('39.8333333','-98.585522'))")
     return row
 
+    
+@app.post("/addAddress")
+async def createAddress(payload: Request):
+    data = await payload.json()
+    address = data['address']
+    city = data['city']
+    district = data['district']
+    zip_code = data['zip_code']
+    phone = data['phone_number']
+    cities = getCityID(city)
+    return createAddress(address, cities, district, zip_code, phone)
+    # row = -1
+    # if len(cities) == 1:
+    #     city_id = cities[0][0]
+    #     row = executeInsert(f"insert into address (address, district, city_id, postal_code, phone, location) values('{address}', '{district}', {city_id}, '{zip_code}', '{phone_number}', POINT('39.8333333','-98.585522'))")
+    # return row
+
 @app.post("/addCustomer")
 async def addCustomer(payload: Request):
-    jsn = await payload.json()
-    print(jsn)
+    data = await payload.json()
+    fname = data['fname']
+    lname = data['lname']
+    email = data['email']
+    store = data['store_id']
+    address = data['address']
+    city = data['city']
+    district = data['district']
+    zip_code = data['zip_code']
+    phone = data['phone']
+
+    customer_id = getSingleCustomer(fname, lname, phone)
+    if customer_id != -1:
+        return False
+
+    cities = getCityID(city)
+
+    address_id = createAddress(address, cities, district, zip_code, phone)
+    query = f"insert into customer (store_id, first_name, last_name, email, address_id) values({store},{fname},{lname},{email},{address_id})"
+
         
