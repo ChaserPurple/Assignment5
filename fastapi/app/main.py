@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
+from typing import Dict, Any
 from app.CustomerData import CustomerData
 from fastapi import Request
 from typing import Dict, Any
