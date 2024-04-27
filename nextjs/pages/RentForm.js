@@ -2,57 +2,58 @@
 import { useRouter } from 'next/router'
 import Layout from "@/components/layout";
 import Link from "next/link";
-import BasicTable from "@/components/basictable";
 import React from "react";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function RentForm(){
-    const router = useRouter();
-    const [selectedFilms, setSelectedFilms] = useState([]);
-
-    useEffect(() => {
-        setSelectedFilms(router.query)
-      }, [])
-
+    const router = useRouter()
+    const [unknownUser, setUser] = useState(false)
 
     async function onSubmit(event) {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
-        await fetch('http://localhost:8000/rentFilms', {
-            method: 'POST',
-            body: {"Customer": formData, "Films": selectedFilms},
+        const request = {}
+        formData.forEach((value, key) => {
+            console.log("key = " + key)
+            console.log("value = " + value)
+            request[key] = value
         })
-        await router.push("/RentConfirmation") //TODO: Actually push the data as well
+        const response = await fetch('http://localhost:8000/getCustomer', {
+            method: 'POST',
+            body: JSON.stringify({"Customer": formData})
+        })
+        const id = await response.json()
+        console.log(id)
+        if(id == -1)
+            setUser(true)
+        else
+            await router.push("/RentSelect?id=" + id)
     }
-
-    const columns = [
-        {
-            Header: 'Title',
-            accessor: 'title',
-        },
-        {
-            Header: 'Year',
-            accessor: 'release_year',
-        }
-    ]
 
     return(
         <Layout>
             <div className = "row">
-                <h1>Become a Customer</h1>
-                <h3><Link href="/">Back</Link></h3>
+                <h1 style={{padding: 20 + 'px'}}>Become a Customer</h1>
+                <h3><Link style={{margin: 20 + 'px'}}  href="/">Back</Link></h3>
             </div>
+            {unknownUser &&
+                <h3 style={{padding: 20 + 'px'}}>That user does not exist.
+                    <Link href="/Register">Become a User?</Link>
+                </h3>
+            }
             <form onSubmit={onSubmit}>
                 {/*First Name*/}
-                <label style={{padding: 20 + 'px'}} htmlFor="fname">First name:</label>
+                <label style={{padding: 20 + 'px'}} htmlFor="fname">First Name:</label>
                 <input style={{margin: 20 + 'px'}} type="text" id="fname" name="fname"/><br/>
                 {/*Last Name*/}
-                <label style={{padding: 20 + 'px'}} htmlFor="lname">Last name:</label>
+                <label style={{padding: 20 + 'px'}} htmlFor="lname">Last Name:</label>
                 <input style={{margin: 20 + 'px'}} type="text" id="lname" name="lname"/><br/>
+                {/*Phone Number*/}
+                <label style={{padding: 20 + 'px'}} htmlFor="phone">Phone Number:</label>
+                <input style={{margin: 20 + 'px'}} type="number" id="phone" name="phone"/><br/>
                 {/*Submit*/}
                 <button style={{padding: 20 + 'px'}} type="submit">Submit</button>
             </form>
-            <BasicTable columns={columns} data={selectedFilms ?? []}/>
         </Layout>
     );
 }
