@@ -1,56 +1,61 @@
-import Layout from "../components/layout";
-import React from 'react';
-import { useTable, useSortBy } from 'react-table';
-import styles from './BasicTable.module.css';
 
+const CheckTable = ({ columns, data, id_key, checked, callback }) => {
+    const id_param = id_key
+    const headers = (
+        <thead>
+          <tr>
+            {" "}
+            {columns.map(column => {
+              return <th key={column.Header}> {column.Header} </th>;
+            })}{" "}
+          </tr>{" "}
+        </thead>
+      );
+    
+      const isChecked = (i)  => {
+        if(i in checked) {
+          return checked[i]
+        }
+        return false
+      }
 
-const CheckTable = ({ columns, data }) => {
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-    } = useTable({ columns, data }, useSortBy);
+    const body = (
+      <tbody>
+        {
+          data.map((row) => {
+            return (
+              <tr key={row[id_param]}>
+                {
+                columns.map(function (column) {
+                  if(column.Header == 'Select')
+                    return (
+                    <td key={`${row[id_param]}_${column.Header}`}>
+                       <input type="checkbox" checked={isChecked(row[id_param])} onChange={() => callback(row, id_param)} />
+                    </td>
+                  );
+                  else
+                  return (
+                    <td key={`${row[id_param]}_${column.Header}`}>
+                      {row[column.accessor]}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })
+        }
+      </tbody>
+    );
+    
 
     return (
-        <Layout>
-            <div className={styles.tableContainer}>
-                <table {...getTableProps()}>
-                    <thead>
-                    {headerGroups.map(headerGroup => (
-                        <tr {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map(column => (
-                                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                    {column.render('Header')}
-                                    <span>
-                                            {column.isSorted
-                                                ? column.isSortedDesc
-                                                    ? ' 🔽'
-                                                    : ' 🔼'
-                                                : ''}
-                                        </span>
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                    {rows.map(row => {
-                        prepareRow(row);
-                        return (
-                            <tr {...row.getRowProps()}>
-                                {row.cells.map(cell => (
-                                    <td {...cell.getCellProps()}>{cell.render('Cell')}<button/></td>
-                                ))}
-                            </tr>
-                        );
-                    })}
-                    </tbody>
-                </table>
-            </div>
-        </Layout>
-    );
-};
+        <div>
+            <table className="table table-bordered table-hover" width="100%">
+                {headers} {body}
+            </table>
+                <input type="submit" value="submit" />
+        </div>
+    )
+}
 
 export default CheckTable;

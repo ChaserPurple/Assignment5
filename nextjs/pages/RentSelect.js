@@ -2,11 +2,24 @@ import Layout from "@/components/layout";
 import React, {useEffect, useState} from "react";
 import {useSearchParams} from "next/navigation";
 import {useRouter} from "next/navigation";
+import CheckTable from "@/components/checktable";
 
 const RentSelect = () => {
     const params = useSearchParams()
     const [films, setFilms] = useState([])
     const router = useRouter()
+    const [checked, setChecked] = useState({})
+
+    const handleRowClick = (row, id_param) => {
+        const key = row[id_param]
+        if(key in checked) {
+            setChecked({...checked, [key]: !checked[key]})
+        }
+        else {
+            setChecked({...checked, [key]: true})
+        }
+        console.log(checked)
+    }
 
     useEffect( () => {
         async function fetchFilms(id){
@@ -22,22 +35,31 @@ const RentSelect = () => {
 
     const columns = [
         {
+            Header: 'Select',
+            accessor: '',
+        },
+        {
             Header: 'Title',
-            accessor: 'title',
+            accessor: 'f.title',
         },
         {
             Header: 'Year',
-            accessor: 'release_year',
+            accessor: 'f.release_year',
         }
     ]
     const handleConfirm = async () => {
+        const filtered = Object.keys(checked).reduce(function (filtered, key) {
+            if (checked[key]) filtered[key] = checked[key];
+            return filtered;
+        }, {});
+
         const headers = new Headers()
         headers.append('Access-Control-Allow-Origin', 'http://localhost:3000')
         await fetch('http://localhost:8000/rentFilms', {
             headers: headers,
             method: 'POST',
             body: {
-                inventory_ids: [],
+                inventory_ids: filtered,
                 customer_id: params.get("id"),
                 date: new Date()
             }
@@ -54,20 +76,9 @@ const RentSelect = () => {
                 </div>
                 {/*<CheckTable columns={columns} data={films}/>*/}
             </main>
+            <CheckTable columns={columns} data={films} id_key={'i.inventory_id'} checked={checked} callback={handleRowClick}/>
         </Layout>
     );
 }
-
-// export async function getServerSideProps() {
-//     const searchParams = useSearchParams()
-//     console.log(searchParams.toString())
-//     // const response = await fetch('http://localhost:8000/getFilms', {
-//     //
-//     // });
-//     // const films = await response.json();
-//     // console.log(response.json())
-//
-//     return { props: {  } };
-// }
 
 export default RentSelect;

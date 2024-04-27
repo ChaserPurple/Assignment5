@@ -24,7 +24,7 @@ export default function RentForm(){
             body: JSON.stringify(request)
         })
         const id = await response.json()
-        if(id['customer_id'] === -1)
+        if(id['customer_id'] == -1)
             setUser(true)
         else
             await router.push("/RentSelect?id=" + id['customer_id'])
