@@ -22,15 +22,16 @@ export default function RentForm(){
         const response = await fetch('http://localhost:8000/getCustomer', {
             headers: headers,
             method: 'POST',
-            body: JSON.stringify({"Customer": formData}),
+            body: JSON.stringify(request),
             mode: "no-cors"
         })
-        const id = await response.json()
-        console.log(id)
-        if(id == -1)
-            setUser(true)
-        else
-            await router.push("/RentSelect?id=" + id)
+        console.log(response)
+        // const id = await response.json()
+        // console.log("=====\'" + id + "\'")
+        // if(id == -1)
+        //     setUser(true)
+        // else
+        //     await router.push("/RentSelect?id=" + id)
     }
 
     return(
