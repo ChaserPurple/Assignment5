@@ -71,7 +71,7 @@ async def getCustomer(payload: Request):
     fname = data['fname']
     lname = data['lname']
     phone = data['phone']
-    return getSingleCustomer(fname, lname, phone)
+    return {'customer_id': getSingleCustomer(fname, lname, phone)}
 
 
 @app.get("/getFilms/")
