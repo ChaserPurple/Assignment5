@@ -130,7 +130,7 @@ async def addCustomer(payload: Request):
     store = data['store_id']
     address = data['address']
     city = data['city']
-    district = data['district']
+    district = data['state']
     zip_code = data['zip_code']
     phone = data['phone']
 
