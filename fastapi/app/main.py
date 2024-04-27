@@ -40,14 +40,7 @@ def executeSelect(table: str, attributes: list[str], end: str = ""):
     with engine.connect() as conn:
         rows = conn.execute(text(query))
         conn.commit()
-        return [dict(zip(attributes, r)) for r in rows]
-
-
-# def executeSelect(query: str):
-#     with engine.connect() as conn:
-#         rows = conn.execute(text(query))
-#         conn.commit()
-#         return [for r in rows]
+        return [dict(zip(attributes, r)) for r in rows] 
 
 def executeInsert(query: str):
     with engine.connect() as conn:
@@ -55,24 +48,6 @@ def executeInsert(query: str):
         conn.commit()
         row = rows.lastrowid
         return row
-
-@app.get("/")
-async def root():
-    return {"message": "Howdy"}
-
-
-@app.get("/getCanadianCustomers")
-def getCanadianCustomers():
-    query: str = """
-        SELECT customer.first_name, customer.last_name, customer.email, city.city
-        FROM customer
-        JOIN address ON customer.address_id = address.address_id
-        JOIN city ON address.city_id = city.city_id
-        JOIN country ON city.country_id = country.country_id
-        WHERE country.country = 'Canada'
-        ORDER BY city.city
-    """
-    return executeSelect(query)
         
 
 @app.get("/getStoreFilms/")
@@ -90,7 +65,6 @@ def getSingleCustomer(fname, lname, phone):
         row_id = result[0]['customer_id']
     return row_id
 
-
 @app.post("/getCustomer")
 async def getCustomer(payload: Request):
     data = await payload.json()
@@ -100,16 +74,17 @@ async def getCustomer(payload: Request):
     return getSingleCustomer(fname, lname, phone)
 
 
-@app.get("/getFilms")
-def getFilms():
-    result = executeSelect('film', ['film_id', 'title', 'release_year', 'rating', 'rental_rate'])
-    query: str = """
-        SELECT film.film_id, film.title, film.release_year, film.length, film.rating, film.rental_rate
-        from film
-    """
-    # result = executeSelect(query)
-    print(result)
-    return result
+@app.get("/getFilms/")
+def getFilms(customer_id: str):
+    store_ids = executeSelect('customer', ['store_id'], f"where customer_id={customer_id}")
+    if len(store_ids) == 1:
+        store_id = store_ids[0]['store_id']
+        result = executeSelect(
+            '(film as f inner join inventory as i on f.film_id=i.film_id)', 
+            ['f.film_id', 'f.title', 'f.release_year', 'f.length', 'f.rating', 'f.rental_rate'],
+            f'where i.store_id={store_id} and i.inventory_id not in (select distinct inventory_id from rental as r where r.return_date is null) group by f.film_id')
+        return result
+
 
 def getCityID(city: str):
     return executeSelect('city', ['city_id'], f"where city='{city}'")
