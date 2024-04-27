@@ -6,5 +6,5 @@ class CustomerData(BaseModel):
     address: str
     city: str
     state: str
-    zip: str
+    zip_code: str
     email: str

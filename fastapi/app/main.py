@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
+from typing import Dict, Any
 
 from app.CustomerData import CustomerData
 
@@ -51,6 +52,6 @@ def getFilms():
     return executeSelect(query)
 
 @app.post("/addCustomer")
-def addCustomer(data: CustomerData):
+def addCustomer(data: Dict[Any, Any]):
     print(data)
         
