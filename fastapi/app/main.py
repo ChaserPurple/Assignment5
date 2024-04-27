@@ -112,32 +112,14 @@ def getFilms():
     return result
 
 def getCityID(city: str):
-    query: str = f"select city_id from city where city='{city}'"
-    return executeSelect(query)
+    return executeSelect('city', ['city_id'], f"where city='{city}'")
 
 def createAddress(address: str, cities: list, district: str, zip_code: str, phone_number: str):
     row = -1
     if len(cities) == 1:
-        city_id = cities[0][0]
+        city_id = cities[0]['city_id']
         row = executeInsert(f"insert into address (address, district, city_id, postal_code, phone, location) values('{address}', '{district}', {city_id}, '{zip_code}', '{phone_number}', POINT('39.8333333','-98.585522'))")
     return row
-
-    
-@app.post("/addAddress")
-async def createAddress(payload: Request):
-    data = await payload.json()
-    address = data['address']
-    city = data['city']
-    district = data['district']
-    zip_code = data['zip_code']
-    phone = data['phone_number']
-    cities = getCityID(city)
-    return createAddress(address, cities, district, zip_code, phone)
-    # row = -1
-    # if len(cities) == 1:
-    #     city_id = cities[0][0]
-    #     row = executeInsert(f"insert into address (address, district, city_id, postal_code, phone, location) values('{address}', '{district}', {city_id}, '{zip_code}', '{phone_number}', POINT('39.8333333','-98.585522'))")
-    # return row
 
 @app.post("/addCustomer")
 async def addCustomer(payload: Request):
@@ -159,6 +141,8 @@ async def addCustomer(payload: Request):
     cities = getCityID(city)
 
     address_id = createAddress(address, cities, district, zip_code, phone)
-    query = f"insert into customer (store_id, first_name, last_name, email, address_id) values({store},{fname},{lname},{email},{address_id})"
+    query = f"insert into customer (store_id, first_name, last_name, email, address_id) values({store},'{fname}','{lname}','{email}',{address_id})"
+    customer_id = executeInsert(query)
+    return customer_id
 
         
