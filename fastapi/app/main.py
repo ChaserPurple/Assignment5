@@ -3,11 +3,24 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 from app.CustomerData import CustomerData
+from fastapi import Request
+from typing import Dict, Any
+from fastapi.middleware.cors import CORSMiddleware
 
 DATABASE_URL = "mysql+mysqlconnector://root:supersecretpassw0rd@localhost/sakila"
 
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def executeSelect(query: str):
     engine = create_engine(DATABASE_URL)
@@ -82,15 +95,15 @@ def getCityID(city: str):
     query: str = f"select city_id from city where city='{city}'"
     return executeSelect(query)
 
-def createAddress(address: str, city: str, state: str, zip: str):
+def createAddress(address: str, city: str, state: str, zip_code: str):
     city_id = getCityID(city)
-    if len(city_id) == 1
+    if len(city_id) == 1:
         query: str = f"insert into address (address, district, city_id, postal_code, phone, )"
 
     
 
 @app.post("/addCustomer")
-def addCustomer(data: CustomerData):
-    print(data)
-    return getCityID(data.city)
+async def addCustomer(payload: Request):
+    jsn = await payload.json()
+    print(jsn)
         

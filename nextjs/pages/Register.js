@@ -23,10 +23,24 @@ export default function Register(){
         // })
         console.log("==========================")
         console.log(request)
-        await fetch('http://localhost:8000/addCustomer', {
+        const response = await fetch('http://localhost:8000/addCustomer', {
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
             method: 'POST',
-            body: request,
+            body: JSON.stringify({
+                "fname": "bob",
+                "lname": "bob",
+                "email": "email",
+                "address": "address?",
+                "city": "Dallas",
+                "state": "Texas",
+                "zip_code": "77379"
+            }),
         })
+
+        const thingy = await response.json()
+        console.log(thingy)
     }
 
     return(
