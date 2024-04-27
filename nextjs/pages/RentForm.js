@@ -14,13 +14,16 @@ export default function RentForm(){
         const formData = new FormData(event.currentTarget)
         const request = {}
         formData.forEach((value, key) => {
-            console.log("key = " + key)
-            console.log("value = " + value)
             request[key] = value
         })
+        console.log(request)
+        const headers = new Headers()
+        headers.append('Access-Control-Allow-Origin', '*')
         const response = await fetch('http://localhost:8000/getCustomer', {
+            headers: headers,
             method: 'POST',
-            body: JSON.stringify({"Customer": formData})
+            body: JSON.stringify({"Customer": formData}),
+            mode: "no-cors"
         })
         const id = await response.json()
         console.log(id)

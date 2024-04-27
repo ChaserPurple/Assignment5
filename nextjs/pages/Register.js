@@ -59,7 +59,7 @@ export default function Register(){
                 <input style={{margin: 20 + 'px'}} type="number" min="0" id="phone" name="phone"/><br/>
                 {/*Store code*/}
                 <label style={{padding: 20 + 'px'}} htmlFor="store_id">Store code (Listed at front of store):</label>
-                <input style={{margin: 20 + 'px'}} type="number" min="0" max="1" id="store_id" name="store_id"/><br/>
+                <input style={{margin: 20 + 'px'}} type="number" min="1" max="2" id="store_id" name="store_id"/><br/>
                 {/*Submit*/}
                 <button style={{padding: 20 + 'px'}} type="submit">Submit</button>
             </form>

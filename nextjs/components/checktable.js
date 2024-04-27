@@ -4,7 +4,7 @@ import { useTable, useSortBy } from 'react-table';
 import styles from './BasicTable.module.css';
 
 
-const BasicTable = ({ columns, data }) => {
+const CheckTable = ({ columns, data }) => {
     const {
         getTableProps,
         getTableBodyProps,
@@ -53,4 +53,4 @@ const BasicTable = ({ columns, data }) => {
     );
 };
 
-export default BasicTable;
+export default CheckTable;
