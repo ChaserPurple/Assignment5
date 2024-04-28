@@ -11,12 +11,12 @@ body {
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 125, 125, 125;
+  --background-end-rgb: 200, 200, 200;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 125, 125, 125;
+    --foreground-rgb: 200, 200, 200;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
