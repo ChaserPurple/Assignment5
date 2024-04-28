@@ -13,8 +13,8 @@ const CheckTable = ({ columns, data, id_key, checked, callback }) => {
     
 
     return (
-        <div>
-            <table className="table table-bordered table-hover" width="100%">
+        <div className="full-width">
+            <table className="table table-bordered table-hover full-width">
                 {
                   <thead>
                     <tr>
@@ -53,7 +53,6 @@ const CheckTable = ({ columns, data, id_key, checked, callback }) => {
                   </tbody>
                 }
             </table>
-                <input type="submit" value="submit" />
         </div>
     )
 }

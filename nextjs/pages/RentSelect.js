@@ -9,6 +9,7 @@ const RentSelect = () => {
     const [films, setFilms] = useState([{'inventory_id': 99999, 'f.title': 'fuck', 'f.release_year': 2008}])
     const router = useRouter()
     const [checked, setChecked] = useState({})
+    const [nothingSelected, setSelected] = useState(true)
 
     const handleRowClick = (row, id_param) => {
         const key = row[id_param]
@@ -55,16 +56,22 @@ const RentSelect = () => {
             return filtered;
         }, {});
 
+        if(Object.keys(filtered).length == 0) {
+            setSelected(false)
+            return
+        }
+
+
         const headers = new Headers()
         headers.append('Access-Control-Allow-Origin', '*')
         await fetch('http://localhost:8000/rentFilms', {
             headers: headers,
             method: 'POST',
-            body: {
+            body: JSON.stringify({
                 inventory_ids: filtered,
                 customer_id: params.get("id"),
                 date: new Date()
-            }
+            })
         })
         router.push('/RentConfirmation')
     }
@@ -76,6 +83,7 @@ const RentSelect = () => {
                     <h1>Select Films to Rent</h1>
                     <button onClick={handleConfirm}>Confirm</button>
                 </div>
+                {!nothingSelected && <h3>Please select at least one film</h3>}
                 <CheckTable className="full-width" columns={columns} data={films} id_key={'i.inventory_id'} checked={checked} callback={handleRowClick}/>
             </main>
         </Layout>
