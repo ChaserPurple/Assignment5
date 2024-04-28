@@ -18,16 +18,12 @@ const RentSelect = () => {
         else {
             setChecked({...checked, [key]: true})
         }
-        console.log(checked)
     }
 
     useEffect( () => {
         async function fetchFilms(id){
-            console.log(id)
             await fetch('http://localhost:8000/getFilms?customer_id=' + id).then(response => {
-                console.log(response)
                 response.json().then(data => {
-                    console.log('boo', data)
                     setFilms(data)
                 })
             })
@@ -55,16 +51,18 @@ const RentSelect = () => {
             return filtered;
         }, {});
 
+        const request = {
+            inventory_ids: Object.keys(filtered),
+            customer_id: params.get("id"),
+            date: new Date()
+        };
+
         const headers = new Headers()
-        headers.append('Access-Control-Allow-Origin', 'http://localhost:3000')
+        headers.append('Access-Control-Allow-Origin', '*')
         await fetch('http://localhost:8000/rentFilms', {
             headers: headers,
             method: 'POST',
-            body: {
-                inventory_ids: filtered,
-                customer_id: params.get("id"),
-                date: new Date()
-            }
+            body: JSON.stringify(request)
         })
         router.push('/RentConfirmation')
     }
