@@ -73,12 +73,14 @@ async def getCustomer(payload: Request):
     phone = data['phone']
     return {'customer_id': getSingleCustomer(fname, lname, phone)}
 
-@app.post('/rent')
+@app.post('/rentFilms')
 async def rentFilm(payload: Request):
     data = await payload.json()
     inventory_ids: list = data['inventory_ids']
     customer_id = data['customer_id']
     date = data['date']
+
+    print(date)
 
     for inventory in inventory_ids:
         query = f"insert into rental (rental_date, inventory_id, customer_id, staff_id) values({date}, {inventory}, {customer_id}, 1)"

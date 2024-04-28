@@ -19,16 +19,12 @@ const RentSelect = () => {
         else {
             setChecked({...checked, [key]: true})
         }
-        console.log(checked)
     }
 
     useEffect( () => {
         async function fetchFilms(id){
-            console.log(id)
             await fetch('http://localhost:8000/getFilms?customer_id=' + id).then(response => {
-                console.log(response)
                 response.json().then(data => {
-                    console.log('boo', data)
                     setFilms(data)
                 })
             })
@@ -68,7 +64,7 @@ const RentSelect = () => {
             headers: headers,
             method: 'POST',
             body: JSON.stringify({
-                inventory_ids: filtered,
+                inventory_ids: Object.keys(filtered),
                 customer_id: params.get("id"),
                 date: new Date()
             })
