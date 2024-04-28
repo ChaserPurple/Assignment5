@@ -6,7 +6,7 @@ import CheckTable from "@/components/checktable";
 
 const RentSelect = () => {
     const params = useSearchParams()
-    const [films, setFilms] = useState([])
+    const [films, setFilms] = useState([{'inventory_id': 99999, 'f.title': 'fuck', 'f.release_year': 2008}])
     const router = useRouter()
     const [checked, setChecked] = useState({})
 
@@ -23,6 +23,7 @@ const RentSelect = () => {
 
     useEffect( () => {
         async function fetchFilms(id){
+            console.log(id)
             await fetch('http://localhost:8000/getFilms?customer_id=' + id).then(response => {
                 console.log(response)
                 response.json().then(data => {
@@ -75,9 +76,8 @@ const RentSelect = () => {
                     <h1>Select Films to Rent</h1>
                     <button onClick={handleConfirm}>Confirm</button>
                 </div>
-                {/*<CheckTable columns={columns} data={films}/>*/}
+                <CheckTable className="full-width" columns={columns} data={films} id_key={'i.inventory_id'} checked={checked} callback={handleRowClick}/>
             </main>
-            <CheckTable columns={columns} data={films} id_key={'i.inventory_id'} checked={checked} callback={handleRowClick}/>
         </Layout>
     );
 }
