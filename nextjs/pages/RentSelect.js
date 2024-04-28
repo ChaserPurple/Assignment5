@@ -55,7 +55,7 @@ const RentSelect = () => {
         }, {});
 
         const headers = new Headers()
-        headers.append('Access-Control-Allow-Origin', 'http://localhost:3000')
+        headers.append('Access-Control-Allow-Origin', '*')
         await fetch('http://localhost:8000/rentFilms', {
             headers: headers,
             method: 'POST',

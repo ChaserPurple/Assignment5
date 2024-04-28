@@ -17,7 +17,7 @@ export default function RentForm(){
         })
         console.log(request)
         const headers = new Headers()
-        headers.append('Access-Control-Allow-Origin', 'http://localhost:3000')
+        headers.append('Access-Control-Allow-Origin', '*')
         const response = await fetch('http://localhost:8000/getCustomer', {
             headers: headers,
             method: 'POST',
