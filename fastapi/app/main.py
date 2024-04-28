@@ -9,7 +9,7 @@ from typing import Dict, Any
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select
 
-DATABASE_URL = "mysql+mysqlconnector://root:supersecretpassw0rd@localhost/sakila"
+DATABASE_URL = "mysql+mysqlconnector://root:supersecretpassw0rd@mysql/sakila"
 
 engine = create_engine(DATABASE_URL)
 
@@ -21,10 +21,10 @@ origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"], # Allows all origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"], # Allows all methods
+    allow_headers=["*"], # Allows all headers
 )
 
 def executeSelect(table: str, attributes: list[str], end: str = ""):
@@ -78,13 +78,13 @@ async def rentFilm(payload: Request):
     data = await payload.json()
     inventory_ids: list = data['inventory_ids']
     customer_id = data['customer_id']
-    date = data['date']
+    date = data['date'][:10]
 
     print(date)
 
     for inventory in inventory_ids:
-        query = f"insert into rental (rental_date, inventory_id, customer_id, staff_id) values({date}, {inventory}, {customer_id}, 1)"
-        print(query)
+        query = f"insert into rental (rental_date, inventory_id, customer_id, staff_id) values(DATE('{date}'), {inventory}, {customer_id}, 1)"
+        executeInsert(query)
 
 @app.get("/getFilms/")
 def getFilms(customer_id: str):
