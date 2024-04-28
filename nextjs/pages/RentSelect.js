@@ -23,14 +23,15 @@ const RentSelect = () => {
 
     useEffect( () => {
         async function fetchFilms(id){
-            const response = await fetch('http://localhost:8000/getFilms?customer_id=' + id);
-            const thingy = await response.json()
-            console.log(thingy)
-            return thingy
+            await fetch('http://localhost:8000/getFilms?customer_id=' + id).then(response => {
+                console.log(response)
+                response.json().then(data => {
+                    console.log('boo', data)
+                    setFilms(data)
+                })
+            })
         }
-        const rawr = fetchFilms(params.get("id"))
-        console.log(rawr)
-        setFilms(rawr)
+        fetchFilms(params.get("id"))
     }, []);
 
     const columns = [

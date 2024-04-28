@@ -1,5 +1,6 @@
 
 const CheckTable = ({ columns, data, id_key, checked, callback }) => {
+    console.log(data)
     const id_param = id_key
     const headers = (
         <thead>
